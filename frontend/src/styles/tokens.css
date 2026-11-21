@@ -1,0 +1,61 @@
+:root {
+  /* 背景 */
+  --cp-bg-base: #0b0f14;
+  --cp-bg-surface: #121821;
+  --cp-bg-elevated: #18202b;
+  --cp-bg-hover: #16202b;
+  --cp-bg-mask: rgba(0, 0, 0, 0.55);
+
+  /* 线条：全局统一 1px，不靠阴影分隔 */
+  --cp-border: #223044;
+  --cp-border-weak: #1a2431;
+  --cp-border-strong: #2f4a63;
+
+  /* 品牌：全局唯一高亮强调色 */
+  --cp-accent: #ff5c20;
+  --cp-accent-dim: #b23c11;
+  --cp-accent-soft: rgba(255, 92, 32, 0.12);
+
+  /* 兼容历史变量名：一律指向强调色，避免旧代码出现第二种强调色 */
+  --cp-cyan: var(--cp-accent);
+  --cp-cyan-dim: var(--cp-accent-dim);
+  /* 洋红只作为首页 2077 场景的局部副色保留，不再参与通用强调 */
+  --cp-magenta: #ff2e97;
+
+  /* 文字 */
+  --cp-text: #e6edf3;
+  --cp-text-secondary: #9fb0c3;
+  --cp-text-tertiary: #6b7c91;
+  --cp-text-quaternary: #5b6b7f;
+  --cp-text-on-accent: #100803;
+
+  /* 语义 */
+  --cp-success: #22c55e;
+  --cp-warning: #ffb020;
+  --cp-error: #ff4d4f;
+
+  /* 描边光：只到 1px 描边强度，不允许柔和外发光 */
+  --cp-glow-cyan-sm: 0 0 0 1px rgba(255, 92, 32, 0.28);
+  --cp-glow-cyan-md: 0 0 0 1px rgba(255, 92, 32, 0.45);
+  --cp-glow-magenta: 0 0 0 1px rgba(255, 46, 151, 0.38);
+
+  /* 焦点 */
+  --cp-focus-ring: 0 0 0 1px var(--cp-accent);
+
+  /* 字体：全局等宽终端字体；Orbitron 仅留给首页大标题 */
+  --cp-font-display: 'Orbitron', 'JetBrains Mono', 'PingFang SC', 'Microsoft YaHei', monospace;
+  --cp-font-body: 'JetBrains Mono', 'Cascadia Code', 'PingFang SC', 'Microsoft YaHei', ui-monospace,
+    monospace;
+  /* 等宽栈必须带 CJK 回退：否则中文字符会落到 SimSun（宋体），终端感立刻崩掉 */
+  --cp-font-mono: 'JetBrains Mono', 'Cascadia Code', 'PingFang SC', 'Microsoft YaHei', ui-monospace,
+    monospace;
+
+  /* 形状与节奏：直角或极小切角 */
+  --cp-radius-sm: 0px;
+  --cp-radius: 2px;
+  --cp-radius-md: 2px;
+  --cp-radius-lg: 2px;
+  --cp-dur-fast: 120ms;
+  --cp-dur: 200ms;
+  --cp-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}

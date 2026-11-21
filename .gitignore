@@ -1,0 +1,41 @@
+# ---- Java / Maven ----
+target/
+*.class
+*.jar
+!**/.mvn/wrapper/maven-wrapper.jar
+*.war
+
+# ---- 前端 ----
+node_modules/
+dist/
+dist-ssr/
+*.local
+*.tsbuildinfo
+.pnpm-store/
+
+# ---- IDE ----
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+
+# ---- 运行时产物 ----
+tmp/
+logs/
+*.log
+*.pid
+
+# ---- 本地配置（可能含密钥）----
+application-local.yml
+application-dev.yml
+.env.local
+.env.*.local
+
+# ---- 系统文件 ----
+.DS_Store
+Thumbs.db
+desktop.ini

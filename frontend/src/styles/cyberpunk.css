@@ -1,0 +1,407 @@
+html {
+  color-scheme: dark;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+}
+
+html,
+body {
+  margin: 0;
+  background-color: var(--cp-bg-base);
+  color: var(--cp-text);
+}
+
+body {
+  font-family: var(--cp-font-body);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* 工业网格：fixed 定位层，避免 background-attachment: fixed 的重绘 */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(120% 70% at 50% 0%, rgba(255, 92, 32, 0.06), transparent 62%),
+    radial-gradient(130% 100% at 50% 45%, transparent 52%, rgba(0, 0, 0, 0.6) 100%),
+    linear-gradient(rgba(255, 92, 32, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 92, 32, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 内容层必须高于网格层 */
+#app {
+  position: relative;
+  z-index: 1;
+}
+
+h1, h2, h3, .cp-title {
+  font-family: var(--cp-font-display);
+  letter-spacing: 0.02em;
+}
+
+/* 滚动条 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--cp-border) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--cp-border);
+  border: 2px solid transparent;
+  background-clip: content-box;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cp-border-strong);
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::selection {
+  background: rgba(255, 92, 32, 0.28);
+  color: var(--cp-text-on-accent);
+}
+
+/* 键盘可访问性：只在键盘导航时出现 */
+:focus-visible {
+  outline: 2px solid var(--cp-cyan);
+  outline-offset: 2px;
+  border-radius: var(--cp-radius-sm);
+}
+
+/* antd 的 :focus 样式由 cssinjs 在运行时注入，与上面的选择器同优先级且更晚生效，
+   会把焦点环吞掉。无障碍优先于样式收敛，这里用 !important 保底。 */
+.ant-btn:focus-visible,
+.ant-input:focus-visible,
+.ant-input-number:focus-visible,
+.ant-select-selector:focus-visible,
+.ant-menu-item:focus-visible,
+.ant-menu-submenu-title:focus-visible,
+.ant-pagination-item:focus-visible,
+.ant-tabs-tab-btn:focus-visible,
+.ant-checkbox-input:focus-visible + .ant-checkbox-inner,
+.ant-radio-input:focus-visible + .ant-radio-inner,
+.ant-switch:focus-visible,
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+[tabindex]:not([tabindex='-1']):focus-visible {
+  outline: 2px solid var(--cp-cyan) !important;
+  outline-offset: 2px !important;
+}
+
+/* ── 霓虹组件层：把 antd 的平面控件拉成 HUD 质感 ───────────── */
+
+/* 主按钮：常亮描边 + 悬停加亮 */
+.ant-btn-primary {
+  box-shadow: inset 0 0 0 1px rgba(255, 92, 32, 0.45);
+}
+
+.ant-btn-primary:not(:disabled):hover {
+  box-shadow: inset 0 0 0 1px rgba(255, 92, 32, 0.9);
+}
+
+/* 卡片四角 HUD 括号 */
+.ant-card {
+  position: relative;
+}
+
+.ant-card::before,
+.ant-card::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-style: solid;
+  border-color: rgba(255, 92, 32, 0.45);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ant-card::before {
+  top: 0;
+  left: 0;
+  border-width: 1px 0 0 1px;
+}
+
+.ant-card::after {
+  right: 0;
+  bottom: 0;
+  border-width: 0 1px 1px 0;
+}
+
+/* 表头下方冷光分隔线 */
+.ant-table-thead > tr > th {
+  border-bottom: 1px solid rgba(255, 92, 32, 0.32) !important;
+}
+
+/* 动效降级 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+/* 多行输入统一为"聊天框"行为：自动增高、去掉右下角手动拖拽把手 */
+textarea.ant-input {
+  resize: none;
+  line-height: 1.6;
+}
+
+
+/* 自动增高输入框（聊天框式）：
+   Chrome 支持 field-sizing 时由布局引擎自己算高度，零 JS 开销；
+   不支持时由 v-auto-grow 指令写内联 height 兜底。
+   高度区间（min/max）由指令写成内联样式，避免被组件库运行时注入的规则覆盖。 */
+.ant-input.cp-autogrow {
+  field-sizing: content;
+  resize: none;
+  line-height: 1.6;
+  overflow-y: auto;
+}
+
+/* 键盘用户跳过导航：默认移出视口，聚焦时滑入 */
+.cp-skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 1000;
+  padding: 8px 14px;
+  border-radius: 0;
+  background: var(--cp-bg-elevated);
+  color: var(--cp-text);
+  border: 1px solid var(--cp-cyan);
+  font-family: var(--cp-font-body);
+  text-decoration: none;
+  transform: translateY(-200%);
+  transition: transform var(--cp-dur-fast) var(--cp-ease);
+}
+
+.cp-skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid var(--cp-cyan) !important;
+  outline-offset: 2px !important;
+}
+
+
+/* ── 全局形状规范：直角 / 极小切角 + 1px 边框，禁止柔和投影 ──────
+   antd 的样式在运行时注入到 <head> 末尾，普通选择器会被覆盖，故用 !important 收敛。 */
+.ant-card,
+.ant-card-head,
+.ant-modal-content,
+.ant-modal-header,
+.ant-dropdown-menu,
+.ant-select-dropdown,
+.ant-picker-panel,
+.ant-table-wrapper .ant-table,
+.ant-table-wrapper .ant-table-container,
+.ant-descriptions,
+.ant-alert,
+.ant-tag,
+.ant-popover-inner,
+.ant-tooltip-inner {
+  border-radius: var(--cp-radius) !important;
+}
+
+.ant-btn,
+.ant-input,
+.ant-input-affix-wrapper,
+.ant-input-number,
+.ant-select-selector,
+.ant-picker,
+.ant-segmented,
+.ant-upload {
+  border-radius: var(--cp-radius) !important;
+}
+
+/* 柔和投影一律换成 1px 硬边 */
+.ant-dropdown-menu,
+.ant-select-dropdown,
+.ant-picker-panel {
+  box-shadow: 0 0 0 1px var(--cp-border-strong) !important;
+}
+
+.ant-modal-content {
+  box-shadow: 0 0 0 1px var(--cp-border-strong) !important;
+}
+
+.ant-btn:not(.ant-btn-primary) {
+  box-shadow: none;
+}
+
+/* 全局等宽字体的字距补偿：等宽字体在小字号下比比例字体更宽 */
+body,
+.ant-btn,
+.ant-input,
+.ant-menu,
+.ant-table {
+  font-feature-settings: 'liga' 0, 'calt' 0;
+}
+
+/* ---------- 路由进出场：入场轻微下压 + 提亮，退场快速上移淡出 ---------- */
+.cp-route-enter-active {
+  transition:
+    opacity 220ms var(--cp-ease, ease),
+    transform 220ms var(--cp-ease, ease),
+    filter 220ms linear;
+}
+
+.cp-route-leave-active {
+  transition:
+    opacity 110ms linear,
+    transform 110ms linear;
+}
+
+.cp-route-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+  filter: brightness(1.55) saturate(0.85);
+}
+
+.cp-route-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cp-route-enter-active,
+  .cp-route-leave-active {
+    transition: none;
+  }
+
+  .cp-route-enter-from,
+  .cp-route-leave-to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* ---------- 管理端终端表格（全局规范：无柔影 / 直角 / 1px 分隔 / 左侧橙色指示） ---------- */
+.term-table .ant-table {
+  background: transparent;
+  font-family: var(--cp-font-mono);
+}
+
+.term-table .ant-table-container {
+  border: 1px solid #1f242b;
+}
+
+.term-table .ant-table-thead > tr > th {
+  background: #0e1116 !important;
+  border-bottom: 1px solid #23262d !important;
+  padding: 10px 12px !important;
+  font-weight: 400;
+}
+
+.term-table .ant-table-thead > tr > th::before {
+  display: none !important;
+}
+
+.term-table .th {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  line-height: 1.2;
+}
+
+.term-table .th__cn {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #7c8794;
+}
+
+.term-table .th__en {
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  color: #3f4854;
+}
+
+.term-table .ant-table-tbody > tr > td {
+  background: transparent;
+  border-bottom: 1px solid #23262d !important;
+  padding: 10px 12px !important;
+  font-size: 11px;
+  color: #a7b2bf;
+}
+
+.term-table .ant-table-tbody > tr:hover > td {
+  background: #1a1b22 !important;
+}
+
+.term-table .ant-table-tbody > tr > td:first-child {
+  position: relative;
+}
+
+.term-table .ant-table-tbody > tr > td:first-child::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: transparent;
+}
+
+.term-table .ant-table-tbody > tr:hover > td:first-child::before {
+  background: var(--cp-accent);
+}
+
+.term-table .ant-table-placeholder,
+.term-table .ant-table-placeholder:hover > td {
+  background: transparent !important;
+}
+
+.term-table .ant-table-cell-fix-left,
+.term-table .ant-table-cell-fix-right {
+  background: #14181e !important;
+}
+
+.term-table .ant-table-tbody > tr:hover > .ant-table-cell-fix-left,
+.term-table .ant-table-tbody > tr:hover > .ant-table-cell-fix-right {
+  background: #1a1b22 !important;
+}
+
+.term-table .ant-table-cell-fix-left-last::after,
+.term-table .ant-table-cell-fix-right-first::after {
+  box-shadow: none !important;
+}
+
+/* 每页条数下拉：终端样式，避免被 44px 的触发器裁成一位数 */
+.term-select-popup .ant-select-item {
+  min-width: 64px;
+  font-family: var(--cp-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.term-select-popup .ant-select-item-option-content {
+  color: #8b95a1;
+}
+
+.term-select-popup .ant-select-item-option-active .ant-select-item-option-content,
+.term-select-popup .ant-select-item-option-selected .ant-select-item-option-content {
+  color: var(--cp-accent);
+}
